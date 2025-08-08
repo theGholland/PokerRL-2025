@@ -1,4 +1,4 @@
 requests
-gym==0.10.9
+gymnasium
 pycrayon==0.5
 psutil
