@@ -30,7 +30,7 @@ class DriverBase(WorkerBase):
         super().__init__(t_prof=t_prof)
 
         if self._t_prof.CLUSTER:
-            self._ray.init_cluster(redis_address=t_prof.redis_head_adr)
+            self._ray.init_cluster(address=t_prof.ray_head_addr)
         else:
             self._ray.init_local()
 

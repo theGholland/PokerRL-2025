@@ -41,7 +41,7 @@ class TrainingProfileBase:
                  DEBUGGING=False,
 
                  # --- Only relevant if running distributed
-                 redis_head_adr=None,  # (str) IP under which the ray redis server can be reached
+                 ray_head_addr=None,  # (str) Address of the Ray head node
                  ):
         """
         Args:
@@ -66,8 +66,8 @@ class TrainingProfileBase:
             CLUSTER:                                requires "DISTRIBUTED==True".
                                                     If True, runs on many machines, if False, runs on local CPUs/GPUs.
             DEBUGGING (bool):                       Whether to use assert statements for debugging
-            redis_head_adr:                         Only applicable if "CLUSTER==True". IP address under which the ray
-                                                    head can be found.
+            ray_head_addr:                          Only applicable if "CLUSTER==True". Address where the Ray head
+                                                    can be found.
 
         """
 
@@ -84,12 +84,12 @@ class TrainingProfileBase:
         self.module_args = module_args
 
         if CLUSTER:
-            if redis_head_adr:
-                self.redis_head_adr = redis_head_adr
+            if ray_head_addr:
+                self.ray_head_addr = ray_head_addr
             else:
-                from ray import services
+                from ray.util import get_node_ip_address
 
-                self.redis_head_adr = services.get_node_ip_address() + ":6379"
+                self.ray_head_addr = get_node_ip_address() + ":6379"
         self.DISTRIBUTED = DISTRIBUTED or CLUSTER
         self.CLUSTER = CLUSTER
         self.DEBUGGING = DEBUGGING
