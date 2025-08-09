@@ -71,7 +71,8 @@ class ChiefBase(WorkerBase):
 
 class _LogBuffer:
     """
-    This class STORES logs. It does not write them to TensorBoard; for that use CrayonWrapper.
+    This class STORES logs. It does not write them to TensorBoard; for that use
+    :class:`TensorboardLogger`.
     """
 
     def __init__(self):

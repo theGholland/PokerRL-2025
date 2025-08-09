@@ -86,14 +86,12 @@ pip install PokerRL
 Note: For distributed runs you would need Linux and also `pip install PokerRL[distributed]`. This is not required for
 local-only usage.
 
-This framework uses [PyCrayon](https://github.com/torrvision/crayon), a language-agnostic wrapper around
-Tensorboard. Please follow the instructions on their GitHub page to set it up. After you have installed PyCrayon, you
-can run and start the log server via
+This framework logs training metrics with TensorBoard. After running an
+example you can inspect the results with
 ```
-docker run -d -p 8888:8888 -p 8889:8889 --name crayon alband/crayon
-docker start crayon
+tensorboard --logdir <path_to_logs>
 ```
-Now try to access Tensorboard in your browser at `localhost:8888`.
+and opening the reported URL in your browser.
 
 #### Running some Tests
 Run this command in the directory containing PokerRL to check whether all unittests pass. 
@@ -129,7 +127,6 @@ and this
     sudo yum install git gcc g++ polkit -y
     sudo amazon-linux-extras install docker -y
     sudo service docker start
-    sudo docker pull alband/crayon 
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
     bash Miniconda3-latest-Linux-x86_64.sh -b -p /home/ec2-user/miniconda
     export PATH=/home/ec2-user/miniconda/bin:$PATH
@@ -146,9 +143,6 @@ and this
 1. Every time you fire up a new instance with your AMI, execute
     ```
     sudo service docker start
-    sudo docker inspect -f {{.State.Running}} crayon || sudo docker run -d -p 8888:8888 -p 8889:8889 --name crayon alband/crayon
-    sudo docker start crayon
-    
     screen
     export OMP_NUM_THREADS=1
     export PATH=/home/ec2-user/miniconda/bin:$PATH

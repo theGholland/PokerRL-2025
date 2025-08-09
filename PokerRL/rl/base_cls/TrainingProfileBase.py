@@ -35,7 +35,6 @@ class TrainingProfileBase:
 
                  # --- Computing
                  path_data=None,
-                 local_crayon_server_docker_address="localhost",
                  device_inference="cpu",
                  DISTRIBUTED=False,
                  CLUSTER=False,
@@ -48,7 +47,7 @@ class TrainingProfileBase:
         Args:
             name (str):                             Under this name all logs, data, and checkpoints will appear.
             log_verbose (bool):                     Whether the program shall log detailed in Tensorboard.
-            log_export_freq:                        Every X iterations, logs are pushed to the Crayon Docker container.
+            log_export_freq:                        Every X iterations, logs are written to TensorBoard.
             checkpoint_freq (int):                  Every X iterations, make a recoverable copy of state of training.
             eval_agent_export_freq (int):        Every X iterations, an EvalAgent instance of the algo is exported.
             game_cls (PokerEnv subclass):           Class (not instance) to be trained in.
@@ -62,7 +61,6 @@ class TrainingProfileBase:
                                                     key in the ""module_args"" dict.
             path_data:                              path to store data (e.g. checkpoints) the algorithm generates in.
                                                     If None, we will store data in a folder we create in your home dir.
-            local_crayon_server_docker_address:     ip of crayon docker container (default: localhost)
             device_inference:                       "cpu" or "cuda". This device will be used for batched NN inference
             DISTRIBUTED (bool):                     Whether ray should be used at all.
             CLUSTER:                                requires "DISTRIBUTED==True".
@@ -92,8 +90,6 @@ class TrainingProfileBase:
                 from ray import services
 
                 self.redis_head_adr = services.get_node_ip_address() + ":6379"
-        self.local_crayon_server_docker_address = local_crayon_server_docker_address
-
         self.DISTRIBUTED = DISTRIBUTED or CLUSTER
         self.CLUSTER = CLUSTER
         self.DEBUGGING = DEBUGGING

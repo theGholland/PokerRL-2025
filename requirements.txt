@@ -1,4 +1,4 @@
 requests
 gymnasium
-pycrayon==0.5
 psutil
+tensorboard
