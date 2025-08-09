@@ -2,3 +2,4 @@ requests
 gymnasium
 psutil
 tensorboard
+scipy>=1.14.0
