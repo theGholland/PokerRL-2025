@@ -87,7 +87,7 @@ class EnvWrapperBuilderBase:
         This is only run once, so it is ok, if it is not efficient to evaluate this.
         """
         _env = self.env_cls(env_args=self.env_args, lut_holder=self.lut_holder, is_evaluating=True)
-        return _env.observation_space.shape[0]
+        return _env.obs_size
 
     def _get_num_private_observation_features(self):
         """
