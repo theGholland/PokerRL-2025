@@ -6,9 +6,8 @@ import torch
 # not being able to import ray is okay if you don't run distributed!
 try:
     import ray
-    import ray.utils
 except ModuleNotFoundError:
-    pass
+    ray = None
 
 
 class MaybeRay:
@@ -29,18 +28,14 @@ class MaybeRay:
         self.runs_cluster = runs_cluster
 
     # __________________________________________________ ray wrapper ___________________________________________________
-    def init_cluster(self, redis_address):
+    def init_cluster(self, address):
         assert self.runs_cluster
-        ray.init(
-            redis_address=redis_address,
-            redis_max_memory=min(10 ** 10, int(psutil.virtual_memory().total * 0.1)),
-            object_store_memory=min(2 * (10 ** 10), int(psutil.virtual_memory().total * 0.4)),
-        )
+        if self.runs_distributed:
+            ray.init(address=address)
 
     def init_local(self):
         if self.runs_distributed:
             ray.init(
-                redis_max_memory=min(10 ** 10, int(psutil.virtual_memory().total * 0.1)),
                 object_store_memory=min(2 * (10 ** 10), int(psutil.virtual_memory().total * 0.4)),
             )
 
