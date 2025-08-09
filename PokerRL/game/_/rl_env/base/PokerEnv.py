@@ -258,7 +258,6 @@ class PokerEnv:
             # __________________________  Return Complete _Observation Space  __________________________
             # Tuple (lots of spaces.Discrete and spaces.Box)
             _observation_space = spaces.Tuple(_table_space + _player_space + _board_space)
-            _observation_space.shape = [len(_observation_space.spaces)]
 
         else:
             # __________________________  Public Information About Game State  _________________________
@@ -327,7 +326,9 @@ class PokerEnv:
             # __________________________  Return Complete _Observation Space  __________________________
             # Tuple (lots of spaces.Discrete and spaces.Box)
             _observation_space = spaces.Tuple(_table_space + _player_space + _board_space)
-            _observation_space.shape = [len(_observation_space.spaces)]
+
+        # store the size of the observation vector separately as spaces.Tuple has no shape attribute
+        self.obs_size = len(_observation_space.spaces)
         return _observation_space, obs_idx_dict, obs_parts_idxs_dict
 
     def _init_from_args(self, env_args, is_evaluating):
@@ -1263,7 +1264,7 @@ class PokerEnv:
 
         """
         if is_terminal:
-            return np.zeros(shape=self.observation_space.shape, dtype=np.float32)  # terminal is all zero
+            return np.zeros(shape=(self.obs_size,), dtype=np.float32)  # terminal is all zero
         normalization_sum = float(sum([s.starting_stack_this_episode for s in self.seats])) / self.N_SEATS
         return np.array(self._get_table_state(normalization_sum=normalization_sum) \
                         + self._get_player_states_all_players(normalization_sum=normalization_sum) \

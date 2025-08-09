@@ -50,7 +50,7 @@ class FlatLimitPokerEnvBuilder(_EnvWrapperBuilderBase):
 
     def _get_num_public_observation_features(self):
         _env = self.env_cls(env_args=self.env_args, lut_holder=self.lut_holder, is_evaluating=True)
-        return _env.observation_space.shape[0] + self.action_vector_size
+        return _env.obs_size + self.action_vector_size
 
     def get_vector_idx(self, round_, p_id, nth_action_this_round, action_idx):
         # *2 in line 3 stands for len([Poker.BET_RAISE, Poker.CHECK_CALL]). If action is fold, the obs is never going to
