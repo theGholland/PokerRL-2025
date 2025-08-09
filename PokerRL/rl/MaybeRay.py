@@ -56,7 +56,13 @@ class MaybeRay:
 
     def create_worker(self, cls, *args):
         if self.runs_distributed:
-            return cls.remote(*args)
+            num_gpus = 0
+            try:
+                if torch.cuda.is_available():
+                    num_gpus = 1
+            except Exception:
+                num_gpus = 0
+            return cls.options(num_gpus=num_gpus).remote(*args)
         return cls(*args)
 
     def wait(self, _list, num_returns=None, timeout=None, return_not_ready=False):

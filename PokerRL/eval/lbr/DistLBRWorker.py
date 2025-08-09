@@ -7,12 +7,11 @@ as you want to accelerate the LBR computation; the EvalLBRMaster will manage the
 """
 
 import ray
-import torch
 
 from PokerRL.eval.lbr.LocalLBRWorker import LocalLBRWorker as LocalEvalLBRWorker
 
 
-@ray.remote(num_cpus=1, num_gpus=1 if torch.cuda.is_available() else 0)
+@ray.remote(num_cpus=1)
 class DistLBRWorker(LocalEvalLBRWorker):
 
     def __init__(self, t_prof, chief_handle, eval_agent_cls):

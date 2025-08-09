@@ -93,7 +93,10 @@ class TrainingProfileBase:
         self.DISTRIBUTED = DISTRIBUTED or CLUSTER
         self.CLUSTER = CLUSTER
         self.DEBUGGING = DEBUGGING
-        self.HAVE_GPU = torch.cuda.is_available()
+        try:
+            self.HAVE_GPU = torch.cuda.is_available()
+        except Exception:
+            self.HAVE_GPU = False
 
         self.n_seats = self.module_args["env"].n_seats
 
