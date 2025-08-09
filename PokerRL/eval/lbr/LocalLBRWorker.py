@@ -311,7 +311,11 @@ class LocalLBRWorker:
 class _AgentWrapper:
 
     def __init__(self, t_prof, lbr_args, eval_agent_cls):
-        self.USE_GPU = (t_prof.HAVE_GPU and lbr_args.use_gpu_for_batch_eval and torch.cuda.is_available())
+        try:
+            _cuda_ok = torch.cuda.is_available()
+        except Exception:
+            _cuda_ok = False
+        self.USE_GPU = (t_prof.HAVE_GPU and lbr_args.use_gpu_for_batch_eval and _cuda_ok)
 
         self.cpu_agent = eval_agent_cls(t_prof=t_prof, device=torch.device("cpu"))
 
