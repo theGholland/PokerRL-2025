@@ -27,6 +27,9 @@ setuptools.setup(
     install_requires=requirements,
     extras_require={
         'distributed': requirements_dist,
+        'dev': [
+            'pytest',
+        ],
     },
     include_package_data=True,
     classifiers=[

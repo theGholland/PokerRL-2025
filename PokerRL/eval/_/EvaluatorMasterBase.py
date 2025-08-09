@@ -133,7 +133,8 @@ class EvaluatorMasterBase(WorkerBase):
 
     def _log_results(self, agent_mode, stack_size_idx, iter_nr, score, upper_conf95=None, lower_conf95=None):
         """
-        Log evaluation results by sending these results to the Chief, who will later send them to the Crayon log server.
+        Log evaluation results by sending these results to the Chief, who will
+        later forward them to TensorBoard.
 
         Args:
             agent_mode:             Evaluation mode of the agent whose performance is logged

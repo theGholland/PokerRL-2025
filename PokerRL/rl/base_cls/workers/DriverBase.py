@@ -4,7 +4,7 @@
 import shutil
 from os.path import join as ospj
 
-from PokerRL._.CrayonWrapper import CrayonWrapper
+from PokerRL._.TensorboardLogger import TensorboardLogger
 from PokerRL.rl.base_cls.workers.WorkerBase import WorkerBase
 from PokerRL.util import file_util
 
@@ -139,12 +139,11 @@ class DriverBase(WorkerBase):
                                  self._rlbr_ps),
             ])
 
-        self.crayon = CrayonWrapper(name=t_prof.name, chief_handle=self.chief_handle,
-                                    path_log_storage=self._t_prof.path_log_storage,
-                                    crayon_server_address=t_prof.local_crayon_server_docker_address,
-                                    runs_distributed=t_prof.DISTRIBUTED,
-                                    runs_cluster=t_prof.CLUSTER,
-                                    )
+        self.logger = TensorboardLogger(name=t_prof.name, chief_handle=self.chief_handle,
+                                        path_log_storage=self._t_prof.path_log_storage,
+                                        runs_distributed=t_prof.DISTRIBUTED,
+                                        runs_cluster=t_prof.CLUSTER,
+                                        )
 
     def _maybe_load_checkpoint_init(self):
         if self._step_to_import is None:
@@ -192,11 +191,9 @@ class DriverBase(WorkerBase):
                              self._cfr_iter)
 
     def save_logs(self):
-        """
-        Pulls all new logs from the LogBuffer and adds them to crayon (Tensorboard wrapper). It also saves them to disk.
-        """
-        self.crayon.update_from_log_buffer()
-        self.crayon.export_all(iter_nr=self._cfr_iter)
+        """Pull new logs from the Chief and add them to TensorBoard."""
+        self.logger.update_from_log_buffer()
+        self.logger.export_all(iter_nr=self._cfr_iter)
 
         # Delete past version
         s = [self._cfr_iter]
